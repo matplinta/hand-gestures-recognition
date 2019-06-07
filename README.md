@@ -1,7 +1,9 @@
 # hand-gestures-recognition 
 ## volume controller :wave: :arrow_right: :speaker: :sound: :mute:
 Autor: Mateusz Plinta
+
 Opis: Projekt realizowany w ramach zajęć Śledzenie Ruchu (Motion Tracking)
+
 Uczelnia: AGH im. Stanisława Staszica w Krakowie
 # Dokumentacja
 Program wykorzystuje dwa rodzaje śledzenia ruchu: detekcja dłoni oraz rozpoznawanie gestów rąk.
