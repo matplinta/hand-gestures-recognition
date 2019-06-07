@@ -1,4 +1,5 @@
-# hand-gestures-recognition :arrow_right: volume controller :wave: :arrow_right: :speaker: :sound: :mute:
+# hand-gestures-recognition 
+## volume controller :wave: :arrow_right: :speaker: :sound: :mute:
 Autor: Mateusz Plinta
 Opis: Projekt realizowany w ramach zajęć Śledzenie Ruchu (Motion Tracking)
 Uczelnia: AGH im. Stanisława Staszica w Krakowie
