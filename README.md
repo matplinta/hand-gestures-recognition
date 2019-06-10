@@ -1,4 +1,4 @@
-# hand-gestures-recognition 
+# hand-gestures-recognition
 ## volume controller :wave: :arrow_right: :speaker: :sound: :mute:
 Autor: Mateusz Plinta
 
@@ -7,10 +7,10 @@ Opis: Projekt realizowany w ramach zajęć Śledzenie Ruchu (Motion Tracking)
 Uczelnia: AGH im. Stanisława Staszica w Krakowie
 # Dokumentacja
 Program wykorzystuje dwa rodzaje śledzenia ruchu: detekcja dłoni oraz rozpoznawanie gestów rąk.
-Ideą projektu był program umożliwiający sterowanie dowolną, możliwą do skonfigurowania rzeczą przy pomocy gestów dłoni. Przykładowo, w tym programie zaimplementowano sterowanie głośnością dźwięku systemu przy pomocy (głównie) 3 gestów dłoni. 
+Ideą projektu był program umożliwiający sterowanie dowolną, możliwą do skonfigurowania rzeczą przy pomocy gestów dłoni. Przykładowo, w tym programie zaimplementowano sterowanie głośnością dźwięku systemu przy pomocy (głównie) 3 gestów dłoni.
 ## Opis
 Program wykorzystuje bibliotekę **opencv**, **tensorflow** oraz **keras** do załadowania odpowiednich modeli i przewidywania gestów.
-Po uruchomieniu, jesteśmy poproszeni o wybranie obrazu, będącego tłem dla badanej ręki, co robimy przyciskając klawisz `b`. Jest to potrzebne do późniejszego prawidłowego usunięcia tła i pozostawienia samej dłoni, w widoku po odpowiednim przetworzeniu obrazu, gdzie widokiem końcowym jest dwukolorowa grafika. 
+Po uruchomieniu, jesteśmy poproszeni o wybranie obrazu, będącego tłem dla badanej ręki, co robimy przyciskając klawisz `b`. Jest to potrzebne do późniejszego prawidłowego usunięcia tła i pozostawienia samej dłoni, w widoku po odpowiednim przetworzeniu obrazu, gdzie widokiem końcowym jest dwukolorowa grafika.
 Po załadowaniu obrazu tła następuje ciągłe wykrywanie dłoni na wyznaczonym obszarze. Jeżeli program wykryje obecność dłoni (w dowolnym geście), następuje rozpoznawanie gestu dłoni (predykcja), oraz na podstawie uzyskanego wyniku, oraz jego dokładności, jest wykonywana konkretna akcja. Wykorzystywany model w teorii pozwala na rozróżnienie 5 różnych gestów, jednak w praktyce wykorzystano poniższe trzy, z racji na ich największą dokładność:
 * :point_up_2: - wyłączenie wyciszenia i pogłaśnianie :sound:
 * :ok_hand: - wyłączenie wyciszenia i ściszanie :speaker:
@@ -18,14 +18,17 @@ Po załadowaniu obrazu tła następuje ciągłe wykrywanie dłoni na wyznaczonym
 
 Uprzednie wykrywanie obecności dłoni zostało zastosowane, aby przyspieszyć program, z racji na to że metoda wykrywająca gesty dłoni zajmuje stosunkowo dużo czasu, co niekorzystnie wpływa na prędkość reakcji programu. Dodatkowo, w celu przyspiedzenia działania programu wykorzystano wielowątkowość: opisane akcje wykrywania dłoni oraz analiza konkretnych gestów jest wykonywana przez poboczne procesy, tzw. workery. Proces główny natomiast zajmuje się tylko wyświetlaniem obrazu oraz obsłużeniem kontrolera dźwięku w zależności od predykcji zwróconej przez workera.
 ## Prezentacja
-#### Up(L) :point_up_2: - pogłaśnianie 
+#### Up(L) :point_up_2: - pogłaśnianie
 ![up](img/prediction_up.png)
-#### Ok :ok_hand: - ściszanie 
+#### Ok :ok_hand: - ściszanie
 ![ok](img/prediction_ok.png)
-#### Fist :fist: - wyciszanie 
+#### Fist :fist: - wyciszanie
 ![mute](img/prediction_fist.png)
 ### Preview [[link do wideo]](https://youtu.be/Wsoi_Ua9gs0)
 ![preview](img/preview.gif)
+
+W animacji oraz wideo, od lewej widać zwyczajny obraz kamery, następnie wyfiltrowany już obraz samej dłoni w postaci obrazu dwukolorowego. Dalej na prawo w terminalach pokazywane są debugowe printy, w celu udowodnienia, że komendy działają: pierwszy termianl co sekundę wysyła zapytanie do sterownika głośności o poziom mocy (wartośc wyrażona w procentach) oraz czy dźwięk jest włączony (on, off).
+W terminalu z samej prawej widać printy z wywoływanego programu do detekcji gestów dłoni. Jeżeli wybranym obszarze kamery nie ma ręki, otrzymujemy informację "Hand not detected". W przeciwnym wypadku po rozpoznaniu gestu dłoni otrzymujemy informację o akcji, która na podstawie wybranego gestu została zastosowana: Volume increased by: x%, Volume decreased by: x%, oraz Mute.
 ## Użyte metody, biblioteki...
 Zbieranie klatek wideo zostało zaimplementowane na dwa sposoby. Pierwszy `cv2.VideoCapture(0)`, gdy program jeszcze wykonuje się sekwencyjnie, oraz drugi `WebcamVideoStream(src=0, width=640, height=480).start()`, który implementuje wbudowaną równoległość. Klatki pozyskane z tej metody pakowane są do kolejki ([Queue](https://docs.python.org/3/library/queue.html)), która automatycznie rozsyła klatki do odpowiednich workerów. Oni zaś zwracają przy pomocy innej kolejki informacje o predykcji i jej wyniku procentowym.
 
